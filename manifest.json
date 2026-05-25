@@ -1,0 +1,43 @@
+{
+  "name": "Quiz Studio — Fisiologia II",
+  "short_name": "Quiz Studio",
+  "description": "Quiz Studio Fisiologia II com Correção Didática visível nas configurações, revisão de erros e PWA offline.",
+  "id": "./",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f6f8fc",
+  "theme_color": "#2563eb",
+  "lang": "pt-BR",
+  "categories": [
+    "education",
+    "medical"
+  ],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
