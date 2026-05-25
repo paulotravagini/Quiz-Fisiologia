@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#f8fafc" />
+  <meta name="theme-color" content="#2563eb" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="Quiz Studio" />
+  <meta name="apple-mobile-web-app-title" content="Quiz Studio Pro" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="format-detection" content="telephone=no,email=no,address=no" />
   <meta name="color-scheme" content="light dark" />
   <link rel="manifest" href="./manifest.json" />
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
-  <title>Quiz Studio — Fisiologia II</title>
+  <title>Quiz Studio Pro — Fisiologia II</title>
   <!-- Atualização: Simulado Geral Fisiologia II adicionado -->
   <style>
 
@@ -4454,6 +4454,193 @@ window.app=app;document.addEventListener('DOMContentLoaded',()=>app.init());
 <!-- Feature Update: correcao-didatica-v1 END -->
 
 <!-- Versão atualizada: modo aplicativo/PWA, viewport sem zoom, detecção automática Celular/Tablet/PC e layout responsivo refinado. -->
+
+
+<!-- Patch final GPT-5.5 — modernização, bugs e desempenho -->
+<style id="gpt-modern-performance-patch">
+  :root{
+    --focus:0 0 0 4px color-mix(in srgb,var(--primary) 24%,transparent);
+  }
+  .btn:focus-visible,.icon-btn:focus-visible,.tab:focus-visible,.option:focus-visible,
+  .seg:focus-visible,.filter-chip:focus-visible,.study-card:focus-visible,.topic-pill:focus-visible,
+  .match-select:focus-visible{
+    outline:none;
+    box-shadow:var(--focus),var(--shadow2);
+  }
+  .home-hero-main{
+    isolation:isolate;
+  }
+  .home-hero-main h1{
+    text-wrap:balance;
+  }
+  .modern-sim,.study-card,.home-stat-card,.quiz-card,.side-card{
+    content-visibility:auto;
+    contain-intrinsic-size:1px 260px;
+  }
+  .option,.match-row,.review{
+    content-visibility:auto;
+    contain-intrinsic-size:1px 86px;
+  }
+  .modern-sim{
+    border-color:color-mix(in srgb,var(--primary) 12%,var(--border));
+  }
+  .modern-sim:hover{
+    transform:translateY(-3px);
+    box-shadow:0 24px 60px -36px rgba(15,23,42,.55);
+  }
+  .sim-actions .btn{
+    min-height:40px;
+  }
+  .quiz-actions{
+    max-width:100%;
+  }
+  .correction-box{
+    overflow-wrap:anywhere;
+  }
+  .review p{
+    overflow-wrap:anywhere;
+  }
+  .retry-now-card{
+    margin-top:14px;
+    padding:18px;
+    border-radius:26px;
+    border:1px solid color-mix(in srgb,var(--primary) 18%,var(--border));
+    background:linear-gradient(180deg,color-mix(in srgb,var(--primary) 8%,var(--card)),var(--card));
+    box-shadow:var(--shadow2);
+  }
+  .retry-now-card h3{
+    margin:0 0 6px;
+    letter-spacing:-.035em;
+  }
+  .retry-now-card p{
+    color:var(--muted);
+    line-height:1.55;
+  }
+  .retry-now-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    margin-top:12px;
+  }
+  .wrong-mini-list{
+    display:grid;
+    gap:8px;
+    margin-top:12px;
+  }
+  .wrong-mini{
+    padding:11px;
+    border-radius:16px;
+    background:color-mix(in srgb,var(--card2) 80%,var(--card));
+    border:1px solid var(--border);
+  }
+  .wrong-mini p{
+    margin:4px 0 0;
+    font-size:.9rem;
+  }
+  @media(max-width:520px){
+    .home-dashboard{gap:10px}
+    .home-stat-card b{font-size:1.75rem}
+    .retry-now-actions .btn{width:100%}
+    .sim-actions{flex-direction:column}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms!important;
+      animation-iteration-count:1!important;
+      scroll-behavior:auto!important;
+      transition-duration:.01ms!important;
+    }
+  }
+</style>
+<script id="gpt-modern-performance-patch">
+(function(){
+  if(!window.app) return;
+  app.build='2026-05-25-modern-performance-bugfix';
+
+  // Cache do banco de questões: evita recriar todos os objetos a cada tela.
+  let allCache=null;
+  let idMapCache=null;
+  const originalAll = U.all.bind(U);
+  U.all = function(){
+    if(!allCache) allCache = originalAll();
+    return allCache;
+  };
+  app.invalidateQuestionCache = function(){
+    allCache=null;
+    idMapCache=null;
+  };
+  app.questionMap = function(){
+    if(!idMapCache){
+      idMapCache = new Map(U.all().map(q=>[q.id,q]));
+    }
+    return idMapCache;
+  };
+  app.getQuestionsByIds = function(ids){
+    const map=this.questionMap();
+    return [...new Set(ids||[])].map(id=>map.get(id)).filter(Boolean);
+  };
+
+  const originalInit = app.init.bind(app);
+  app.init = function(){
+    this.invalidateQuestionCache();
+    originalInit();
+  };
+
+  // Botão "Lista" agora inicia diretamente em modo lista e salva a preferência.
+  const originalStartCatIndex = app.startCatIndex.bind(app);
+  app.startCatIndex = function(i,format){
+    if(format && ['cards','list'].includes(format)){
+      this.state.settings.format=format;
+      this.saveSettings();
+    }
+    return originalStartCatIndex(i);
+  };
+  app.startCatList = function(i){ return this.startCatIndex(i,'list'); };
+  app.startCatCards = function(i){ return this.startCatIndex(i,'cards'); };
+
+  const originalSimCard = app.simCard.bind(app);
+  app.simCard = function(c,i){
+    const html = originalSimCard(c,i);
+    return html
+      .replace(`onclick="app.startCatIndex(${i})"`,`onclick="app.startCatCards(${i})" aria-label="Iniciar ${U.escAttr(c.title)} em cartões"`)
+      .replace(`onclick="app.startCatIndex(${i});app.state.settings.format='list';app.renderQuiz()"`,`onclick="app.startCatList(${i})" aria-label="Iniciar ${U.escAttr(c.title)} em lista"`);
+  };
+
+  // Erros salvos: questões não respondidas também entram no banco de revisão.
+  app.updateErrors = function(){
+    const e = new Set(LS.get('error_bank', []));
+    this.state.questions.forEach(q=>{
+      if(this.correct(q.id)) e.delete(q.id);
+      else e.add(q.id);
+    });
+    LS.set('error_bank', [...e]);
+  };
+
+  // Melhor contagem na tela de quiz: considera parear/lista de forma segura.
+  app.answeredCount = function(){
+    return this.state.questions.filter(q=>this.state.answers[q.id]!==undefined).length;
+  };
+  const originalRenderQuiz = app.renderQuiz.bind(app);
+  app.renderQuiz = function(){
+    originalRenderQuiz();
+    const quiz = document.getElementById('quiz');
+    if(!quiz) return;
+    quiz.querySelectorAll?.('.metric b')?.forEach((b,idx)=>{
+      if(idx===0) b.textContent = this.answeredCount();
+    });
+  };
+
+  // Segurança visual: impede zoom estranho por inputs no iOS e melhora teclado na marca.
+  document.addEventListener('DOMContentLoaded',()=>{
+    document.querySelector('.brand')?.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        app.showHome();
+      }
+    });
+  });
+})();
+</script>
 
 <script>
 (function(){
